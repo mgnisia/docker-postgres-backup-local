@@ -1,12 +1,12 @@
-ARG BASETAG=alpine
-FROM postgres:$BASETAG
+# ARG BASETAG=alpine
+FROM postgres:16.0-alpine
 
 ARG GOCRONVER=v0.0.10
 ARG TARGETOS
 ARG TARGETARCH
 RUN set -x \
 	&& apk update && apk add ca-certificates curl \
-	&& curl --fail --retry 4 --retry-all-errors -L https://github.com/prodrigestivill/go-cron/releases/download/$GOCRONVER/go-cron-$TARGETOS-$TARGETARCH-static.gz | zcat > /usr/local/bin/go-cron \
+	&& curl --fail --retry 4 --retry-all-errors -L https://github.com/prodrigestivill/go-cron/releases/download/v0.0.10/go-cron-linux-arm64-static.gz | zcat > /usr/local/bin/go-cron \
 	&& chmod a+x /usr/local/bin/go-cron
 
 ENV POSTGRES_DB="**None**" \
@@ -37,7 +37,7 @@ COPY backup.sh /backup.sh
 VOLUME /backups
 
 ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["exec /usr/local/bin/go-cron -s \"$SCHEDULE\" -p \"$HEALTHCHECK_PORT\" -- /backup.sh"]
+CMD ["exec /usr/local/bin/go-cron -s \"$SCHEDULE\" -p \"$HEALTHCHECK_PORT\" -- /backup.sh "]
 
 HEALTHCHECK --interval=5m --timeout=3s \
   CMD curl -f "http://localhost:$HEALTHCHECK_PORT/" || exit 1
