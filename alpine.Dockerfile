@@ -1,35 +1,35 @@
 # ARG BASETAG=alpine
-FROM postgres:16.0-alpine
+FROM postgres:17.0-alpine
 
 ARG GOCRONVER=v0.0.10
 ARG TARGETOS
 ARG TARGETARCH
 RUN set -x \
-	&& apk update && apk add ca-certificates curl \
-	&& curl --fail --retry 4 --retry-all-errors -L https://github.com/prodrigestivill/go-cron/releases/download/v0.0.10/go-cron-linux-arm64-static.gz | zcat > /usr/local/bin/go-cron \
-	&& chmod a+x /usr/local/bin/go-cron
+  && apk update && apk add ca-certificates curl \
+  && curl --fail --retry 4 --retry-all-errors -L https://github.com/prodrigestivill/go-cron/releases/download/v0.0.10/go-cron-linux-arm64-static.gz | zcat > /usr/local/bin/go-cron \
+  && chmod a+x /usr/local/bin/go-cron
 
 ENV POSTGRES_DB="**None**" \
-    POSTGRES_DB_FILE="**None**" \
-    POSTGRES_HOST="**None**" \
-    POSTGRES_PORT=5432 \
-    POSTGRES_USER="**None**" \
-    POSTGRES_USER_FILE="**None**" \
-    POSTGRES_PASSWORD="**None**" \
-    POSTGRES_PASSWORD_FILE="**None**" \
-    POSTGRES_PASSFILE_STORE="**None**" \
-    POSTGRES_EXTRA_OPTS="-Z6" \
-    POSTGRES_CLUSTER="FALSE" \
-    SCHEDULE="@daily" \
-    BACKUP_DIR="/backups" \
-    BACKUP_SUFFIX=".sql.gz" \
-    BACKUP_KEEP_DAYS=7 \
-    BACKUP_KEEP_WEEKS=4 \
-    BACKUP_KEEP_MONTHS=6 \
-    BACKUP_KEEP_MINS=1440 \
-    HEALTHCHECK_PORT=8080 \
-    WEBHOOK_URL="**None**" \
-    WEBHOOK_EXTRA_ARGS=""
+  POSTGRES_DB_FILE="**None**" \
+  POSTGRES_HOST="**None**" \
+  POSTGRES_PORT=5432 \
+  POSTGRES_USER="**None**" \
+  POSTGRES_USER_FILE="**None**" \
+  POSTGRES_PASSWORD="**None**" \
+  POSTGRES_PASSWORD_FILE="**None**" \
+  POSTGRES_PASSFILE_STORE="**None**" \
+  POSTGRES_EXTRA_OPTS="-Z6" \
+  POSTGRES_CLUSTER="FALSE" \
+  SCHEDULE="@daily" \
+  BACKUP_DIR="/backups" \
+  BACKUP_SUFFIX=".sql.gz" \
+  BACKUP_KEEP_DAYS=7 \
+  BACKUP_KEEP_WEEKS=4 \
+  BACKUP_KEEP_MONTHS=6 \
+  BACKUP_KEEP_MINS=1440 \
+  HEALTHCHECK_PORT=8080 \
+  WEBHOOK_URL="**None**" \
+  WEBHOOK_EXTRA_ARGS=""
 
 COPY hooks /hooks
 COPY backup.sh /backup.sh
